@@ -38,7 +38,7 @@ class Career:
         return (f"\nUma: {self.Uma}\n"
                 f"Speed: {self.speed}, Stamina: {self.stamina}, "
                 f"Power: {self.power}, Guts: {self.guts}, Wit: {self.wit}, Skill Points: {self.skillpts}, "
-                f"Energy: {self.Energy}, Mood: {self.Mood} \n")
+                f"Energy: {self.Energy}, Mood: {self.moodStatus()} \n")
     
     def turnCount(self):
         self.TurnCount += 1
@@ -112,6 +112,18 @@ class Career:
             return "th"
         return {1: "st", 2: "nd", 3: "rd"}.get(n % 10, "th")
     
+    def moodStatus(self):
+        mood_map = {
+        1: "Awful",
+        2: "Bad",
+        3: "Normal",
+        4: "Good",
+        5: "Great"
+    }
+        mood_clamped = max(1, min(5, self.Mood))
+        return mood_map[mood_clamped]
+        
+    
     def speedTrain(self):
         
         if self.checkRaceDay(): # If there is a race, skip action
@@ -119,8 +131,10 @@ class Career:
         
         failcheck = self.failTrain(self.Energy)
         if failcheck:
-            print('Training Failed')
+            print('\nTraining Failed')
             self.Mood += -1
+            print(f'Mood Down by 1')
+            print(f'Mood: {self.moodStatus()}')
             
         else: 
             self.Energy += -20
@@ -279,7 +293,7 @@ class Career:
             return 0.0
         else:
             k = 6
-            n = 1.8
+            n = 1.6
             deficit = (0.5 - (energy/100)) ** n
             return 0.99 * (1 - math.exp(-k * deficit))   
             
@@ -406,9 +420,17 @@ def playTurn(uma):
             print(uma)
         else:
             print("❌ Invalid choice. Try again.")
+            
 def umaRoster():
     #Creates Uma's wih associated stats along with their schedules
     special_week_schedule = {
+    5: {"name": "Debut Race", "difficulty": 200, "runners": 5,"fanReward": 800},
+    12: {"name": "Junior Finals", "difficulty": 280, "runners": 8, "fanReward": 1200},
+    24: {"name": "Classic Finals", "difficulty": 340, "runners": 12,"fanReward": 1600},
+    36: {"name": "Senior Finals", "difficulty": 400, "runners": 16,"fanReward": 2500}
+}
+
+    gold_ship_schedule = {
     5: {"name": "Debut Race", "difficulty": 200, "runners": 5,"fanReward": 800},
     12: {"name": "Junior Finals", "difficulty": 280, "runners": 8, "fanReward": 1200},
     24: {"name": "Classic Finals", "difficulty": 340, "runners": 12,"fanReward": 1600},
@@ -431,7 +453,24 @@ def umaRoster():
     raceSchedule = special_week_schedule
     )
 
-    return{"1": special_week
+    gold_ship = Career(
+    name="Gold Ship",
+    speed=82,
+    stamina=96,
+    power=100,
+    guts=77,
+    wit=70,
+    skillpts=140,
+    speedGrwth=0,
+    staminaGrwth=.2,
+    powerGrwth=.1,
+    gutsGrwth=0,
+    witGrwth=0,
+    raceSchedule = gold_ship_schedule
+    )
+    
+    return{"1": special_week,
+           "2": gold_ship
            }
 def umaSelect():
     roster = umaRoster()
