@@ -389,7 +389,7 @@ def playTurn(uma):
     while True:
         print(f"\n--- Turn {uma.TurnCount} ---")
         print(uma)
-        print("💪 What would you like to do?")
+        print("What would you like to do?")
         print("1. Speed Train")
         print("2. Stamina Train")
         print("3. Power Train")
@@ -419,7 +419,7 @@ def playTurn(uma):
         elif choice == "8":
             print(uma)
         else:
-            print("❌ Invalid choice. Try again.")
+            print("Invalid choice. Try again.")
             
 def umaRoster():
     #Creates Uma's wih associated stats along with their schedules

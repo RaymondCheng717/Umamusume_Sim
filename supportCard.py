@@ -20,11 +20,12 @@ class supportCard:
         for level, bonus_dict in self.all_bonuses.items():
             if level <= self.lvl:
                 for key, value in bonus_dict.items():
+                    value = func(self.lvl) 
                     active[key] = active.get(key, 0) + value
 
         
         return active    
-
+        
     def setLVL(self,new_lvl):
         if new_lvl > 45:
             self.lvl = 45
@@ -38,7 +39,7 @@ class supportCard:
         else:
             self.lvl = new_lvl
         
-        
+       
         
     def supportRoster():
         your_team_ace_Bonuses = {
@@ -57,8 +58,42 @@ class supportCard:
             lvl=1,
             bonuses=your_team_ace_Bonuses
     )
+        fire_at_my_heels_Bonuses = {
+            1: {
+                'Friendship Bonus': lambda lvl: 0.1,
+                'Initial Friendship': lambda lvl: 10 + max((lvl - 1) // 2, 0)  # +1 every 2 levels
+            },
+            10: {
+                'Training Effectiveness': lambda lvl: 0.3,
+                'Race Bonus': lambda lvl: 0.1,
+                'Fan Bonus': lambda lvl: 0.1
+            },
+            15: {
+                'Mood Effect': lambda lvl: 0.2,
+                'Hint Levels': lambda lvl: 0.2,
+                'Hint Frequency': lambda lvl: 0.1
+            },
+            35: {
+                'Power Bonus': lambda lvl: 0.2
+            },
+            40: {
+                'Training Effectiveness': lambda lvl: 0.05,
+                'Training Frequency': lambda lvl: 20
+            },
+            45: {
+                'Specialty Priority': lambda lvl: 0.1
+            }
+        }
+        fire_at_my_heels = supportCard(
+            name = '[Fire at my Heels]',
+            uma = 'Kitasan Black',
+            typing = 'Speed',
+            lvl = 1,
+            bonuses = fire_at_my_heels_Bonuses
+            )
 
-        return {"1": your_team_ace}
+        return {"1": your_team_ace,
+                "2": fire_at_my_heels}
                 
 def main():
     # Get the support roster dictionary
